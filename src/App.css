@@ -1,42 +1,131 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 32px 24px 64px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.payment-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.payment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.card {
-  padding: 2em;
+.payment-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
 }
 
-.read-the-docs {
-  color: #888;
+.search-toggle {
+  border: 1px solid #1f2a37;
+  background: #1f2a37;
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.table-wrap {
+  border: 1px solid #e3e6ea;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.payment-table th,
+.payment-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e8edf2;
+  text-align: left;
+}
+
+.group-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.group-meta {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.group-header td {
+  background: #f4f6f9;
+  font-weight: 600;
+}
+
+.subtotal-row td {
+  font-weight: 600;
+  background: #fbfbfd;
+}
+
+.row-mapped td {
+  background: #f6fbff;
+}
+
+.row-empty td {
+  background: #ffffff;
+}
+
+.search-row td {
+  background: #f9fafb;
+}
+
+.search-cell select {
+  width: 100%;
+  border: 1px solid #d4d8dd;
+  border-radius: 4px;
+  padding: 6px 8px;
+  background: #ffffff;
+}
+
+.payment-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.payment-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #1f2937;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-muted {
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+.status {
+  color: #1f2937;
+  font-weight: 600;
 }
