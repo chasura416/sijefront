@@ -5,12 +5,13 @@ type Option = string;
 type Props = {
   filters: FilterState;
   options: {
+    styleNumber: Option[];
+    supplierItemCode: Option[];
     fabricName: Option[];
-    colorName: Option[];
-    sopoNo: Option[];
-    garmentSize: Option[];
+    fabricColor: Option[];
   };
   onChange: (next: FilterState) => void;
+  paymentCount: number;
 };
 
 const SelectCell = ({
@@ -35,30 +36,47 @@ const SelectCell = ({
   );
 };
 
-export const SearchRow = ({ filters, options, onChange }: Props) => {
+export const SearchRow = ({
+  filters,
+  options,
+  onChange,
+  paymentCount,
+}: Props) => {
+  const payableCells = Array.from({ length: paymentCount * 5 }, (_, index) => (
+    <td key={`payable-${index}`} className="search-cell" />
+  ));
+
   return (
     <tr className="search-row">
-      <td className="search-cell">검색</td>
+      <SelectCell
+        value={filters.styleNumber}
+        options={options.styleNumber}
+        onChange={(value) => onChange({ ...filters, styleNumber: value })}
+      />
+      <SelectCell
+        value={filters.supplierItemCode}
+        options={options.supplierItemCode}
+        onChange={(value) =>
+          onChange({ ...filters, supplierItemCode: value })
+        }
+      />
       <SelectCell
         value={filters.fabricName}
         options={options.fabricName}
         onChange={(value) => onChange({ ...filters, fabricName: value })}
       />
       <SelectCell
-        value={filters.colorName}
-        options={options.colorName}
-        onChange={(value) => onChange({ ...filters, colorName: value })}
+        value={filters.fabricColor}
+        options={options.fabricColor}
+        onChange={(value) => onChange({ ...filters, fabricColor: value })}
       />
-      <SelectCell
-        value={filters.sopoNo}
-        options={options.sopoNo}
-        onChange={(value) => onChange({ ...filters, sopoNo: value })}
-      />
-      <SelectCell
-        value={filters.garmentSize}
-        options={options.garmentSize}
-        onChange={(value) => onChange({ ...filters, garmentSize: value })}
-      />
+      <td className="search-cell" />
+      <td className="search-cell" />
+      <td className="search-cell" />
+      <td className="search-cell" />
+      <td className="search-cell" />
+      <td className="search-cell" />
+      {payableCells}
       <td className="search-cell" />
       <td className="search-cell" />
       <td className="search-cell" />
