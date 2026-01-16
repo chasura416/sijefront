@@ -43,8 +43,8 @@
 }
 
 .payment-table {
-  width: max-content;
-  min-width: 100%;
+  width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 14px;
 }
@@ -91,6 +91,10 @@
   text-align: center;
   color: #94a3b8;
   font-weight: 600;
+}
+
+.currency-head {
+  background: #f4f7fa;
 }
 
 .col-style {

@@ -64,6 +64,14 @@ export const PaymentTable = () => {
     0,
   );
 
+  const grandOrderedQty = Object.values(groupedData).reduce((sum, items) => {
+    return sum + items.reduce((inner, item) => inner + item.orderQuantity, 0);
+  }, 0);
+
+  const grandOrderedAmount = Object.values(groupedData).reduce((sum, items) => {
+    return sum + items.reduce((inner, item) => inner + item.orderAmount, 0);
+  }, 0);
+
   return (
     <section className="payment-section">
       <header className="payment-header">
@@ -107,14 +115,16 @@ export const PaymentTable = () => {
               <th colSpan={3}>Total</th>
             </tr>
             <tr className="column-header-row">
-              <th>Style No.</th>
-              <th>Supplier Item #</th>
-              <th>Fabric Name</th>
-              <th>Fabric Color</th>
-              <th>Order Qty</th>
-              <th>Unit</th>
-              <th colSpan={2}>U/price</th>
-              <th colSpan={2}>Amount</th>
+              <th className="header-spacer" />
+              <th className="header-spacer" />
+              <th className="header-spacer" />
+              <th className="header-spacer" />
+              <th className="header-spacer" />
+              <th className="header-spacer" />
+              <th className="header-spacer" />
+              <th className="header-spacer" />
+              <th className="header-spacer" />
+              <th className="header-spacer" />
               {payments.map((payment) => (
                 <th key={payment.id} colSpan={5} className="payable-header">
                   <div className="payable-meta">
@@ -143,19 +153,20 @@ export const PaymentTable = () => {
                 </th>
               ))}
               <th>Qty</th>
-              <th colSpan={2}>Amount</th>
+              <th className="currency-head" />
+              <th>Amount</th>
             </tr>
             <tr className="column-subheader-row">
-              <th className="subheader-cell" />
-              <th className="subheader-cell" />
-              <th className="subheader-cell" />
-              <th className="subheader-cell" />
-              <th className="subheader-cell" />
-              <th className="subheader-cell" />
+              <th className="subheader-cell">Style No.</th>
+              <th className="subheader-cell">Supplier Item #</th>
+              <th className="subheader-cell">Fabric Name</th>
+              <th className="subheader-cell">Fabric Color</th>
+              <th className="subheader-cell">Order Qty</th>
+              <th className="subheader-cell">Unit</th>
               <th className="subheader-cell currency-cell">$</th>
-              <th className="subheader-cell" />
+              <th className="subheader-cell">U/price</th>
               <th className="subheader-cell currency-cell">$</th>
-              <th className="subheader-cell" />
+              <th className="subheader-cell">Amount</th>
               {payments.flatMap((payment) => [
                 <th key={`payable-${payment.id}-qty`}>Shipped Qty</th>,
                 <th key={`payable-${payment.id}-price-currency`}>$</th>,
@@ -179,7 +190,7 @@ export const PaymentTable = () => {
           {Object.entries(groupedData).map(([salesOrderId, items]) => (
             <tbody key={salesOrderId} className="group-block">
               <tr className="group-header">
-                <td colSpan={10 + payments.length * 5 + 3}>
+                {/* <td colSpan={10 + payments.length * 5 + 3}>
                   <div className="group-title">
                     <span>Sales Order #{salesOrderId}</span>
                     <span className="group-meta">
@@ -187,7 +198,7 @@ export const PaymentTable = () => {
                       {items[0]?.salesOrder.styleCode}
                     </span>
                   </div>
-                </td>
+                </td> */}
               </tr>
               {items.map((item) => {
                 const breakdowns = breakdownsByItemId[item.id] ?? [];
@@ -298,13 +309,54 @@ export const PaymentTable = () => {
                 <td className="number-cell">
                   {formatAmount(subtotals[Number(salesOrderId)] ?? 0)}
                 </td>
-                {payments.flatMap((payment) => [
-                  <td key={`subtotal-${payment.id}-qty`} />,
-                  <td key={`subtotal-${payment.id}-price-currency`} />,
-                  <td key={`subtotal-${payment.id}-price`} />,
-                  <td key={`subtotal-${payment.id}-amount-currency`} />,
-                  <td key={`subtotal-${payment.id}-amount`} />,
-                ])}
+                {payments.flatMap((payment) => {
+                  const groupQty = items.reduce((sum, item) => {
+                    const list =
+                      breakdownsByItemAndPaymentId[item.id]?.[payment.id] ?? [];
+                    return (
+                      sum +
+                      list.reduce(
+                        (inner, entry) => inner + entry.shippedQuantity,
+                        0,
+                      )
+                    );
+                  }, 0);
+                  const groupAmount = items.reduce((sum, item) => {
+                    const list =
+                      breakdownsByItemAndPaymentId[item.id]?.[payment.id] ?? [];
+                    return (
+                      sum +
+                      list.reduce((inner, entry) => inner + entry.amount, 0)
+                    );
+                  }, 0);
+                  return [
+                    <td
+                      key={`subtotal-${payment.id}-qty`}
+                      className="number-cell"
+                    >
+                      {groupQty ? formatNumber(groupQty) : "-"}
+                    </td>,
+                    <td
+                      key={`subtotal-${payment.id}-price-currency`}
+                      className="currency-cell"
+                    >
+                      {groupAmount ? "$" : "-"}
+                    </td>,
+                    <td key={`subtotal-${payment.id}-price`} />,
+                    <td
+                      key={`subtotal-${payment.id}-amount-currency`}
+                      className="currency-cell"
+                    >
+                      {groupAmount ? "$" : "-"}
+                    </td>,
+                    <td
+                      key={`subtotal-${payment.id}-amount`}
+                      className="number-cell"
+                    >
+                      {groupAmount ? formatAmount(groupAmount) : "-"}
+                    </td>,
+                  ];
+                })}
                 <td />
                 <td />
                 <td />
@@ -313,7 +365,15 @@ export const PaymentTable = () => {
           ))}
           <tbody>
             <tr className="grandtotal-row">
-              <td colSpan={10}>G.TTL</td>
+              <td colSpan={4}>G.TTL</td>
+              <td className="number-cell">{formatNumber(grandOrderedQty)}</td>
+              <td />
+              <td className="currency-cell" />
+              <td />
+              <td className="currency-cell">$</td>
+              <td className="number-cell">
+                {formatAmount(grandOrderedAmount)}
+              </td>
               {payments.map((payment, index) => (
                 <td key={`grand-${payment.id}-qty`} className="number-cell">
                   {formatNumber(payableTotalQtyByPayment[index])}
